@@ -14,7 +14,8 @@ class IpAddressesTable extends Component {
                 field: 'name',
                 order: 'asc'
             },
-            openDialog: false
+            openDialog: false,
+            activeFilter: false,
         }
         this.dialogData = {}
     }
@@ -102,8 +103,12 @@ class IpAddressesTable extends Component {
         this.setState(()=>({ openDialog: false}))
     }
 
+    handleFilterClick = ()=>{
+        this.setState(()=>({ activeFilter: true}))
+    }
+
     render(){
-        const {sort, data, openDialog} = this.state
+        const {sort, data, openDialog, activeFilter} = this.state
         return(
             <Fragment>
                 {openDialog && (
@@ -116,10 +121,22 @@ class IpAddressesTable extends Component {
                         onClose={this.dialogData.onClose}
                     />
                 )}
+                <div className='bg-light py-2 px-2 overflow-auto'>
+                    <i className="fa fa-ellipsis-v float-left" aria-hidden="true"></i>
+                    <button
+                        type="button"
+                        class="btn btn-light float-right"
+                        onClick={this.handleFilterClick}
+                    >
+                        <i class='fas fa-filter'></i>
+                        Filter
+                    </button>
+                </div>
                 <Table>
                     <Header
                         sort={sort}
                         onClickSort={this.handleSort}
+                        activeFilter={activeFilter}
                     >
                         <HeaderCell
                             fieldName='name'
