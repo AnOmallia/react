@@ -50,32 +50,23 @@ class IpAddressesTable extends Component {
     }
 
     sorting = (order, data, field)=>{
-        console.log(order, 123)
         if(order === 'asc'){
             data.sort((a, b)=> {
-                console.log(123)
-                // console.log(a[field])
                 if(typeof a[field] === 'string'){
-                    console.log(1)
                     return (a[field] > b[field]) ? 1 : ((b[field] > a[field]) ? -1 : 0)
                 } else{
-                    console.log(2)
                     const s1 = this.sorting(order, a[field], 'port_name')
                     const s2 = this.sorting(order, b[field], 'port_name')
-                    console.log(s1, s2, 'hh')
                     return (s1[0]['port_name'] > s2[0]['port_name']) ? 1 : ((s2[0]['port_name'] > s1[0]['port_name']) ? -1 : 0)
                 }
             })
         } else {
-            // data.sort((a, b)=> (a[field] < b[field]) ? 1 : ((b[field] < a[field]) ? -1 : 0));
             data.sort((a, b)=> {
                 if(typeof a[field] === 'string'){
-                    console.log(54545)
                     return (a[field] < b[field]) ? 1 : ((b[field] < a[field]) ? -1 : 0)
                 } else{
                     const s1 = this.sorting(order, a[field], 'port_name')
                     const s2 = this.sorting(order, b[field], 'port_name')
-                    console.log(s1, s2, 'hh')
                     return (s1[0]['port_name'] < s2[0]['port_name']) ? 1 : ((s2[0]['port_name'] < s1[0]['port_name']) ? -1 : 0)
                 }
             })
@@ -113,7 +104,6 @@ class IpAddressesTable extends Component {
 
     render(){
         const {sort, data, openDialog} = this.state
-        console.log('data', openDialog)
         return(
             <Fragment>
                 {openDialog && (

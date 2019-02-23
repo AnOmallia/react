@@ -2,10 +2,8 @@ import React from 'react';
 
 const Header = ({children, sort, onClickSort})=>{
     const childrenArray = React.Children.map(children, (child, index) => {
-        // console.log('child',child)
         return React.cloneElement(child, {
             activeSort: sort.field === child.props.fieldName ? sort.order : null,
-
             onClickSort: () => onClickSort(child.props.fieldName),
         });
      });

@@ -54,7 +54,7 @@ class Dropdown extends Component{
             <div
                 className={`dropdown d-inline-block ${className}`}
                 onClick={this.toggleOpen}>
-                <a class="btn btn-primary dropdown-toggle" href="#" role="button" id='toogle-dropdown'>
+                <a className="btn btn-primary dropdown-toggle" href="#" role="button" id='toogle-dropdown'>
                     Actions
                 </a>
           {isOpen &&(
@@ -63,7 +63,7 @@ class Dropdown extends Component{
                     className="dropdown-item" href="#"
                     onClick={()=>{onSelectAction(id, 'delete')}}
                 >
-                    <i class='fas fa-trash-alt'></i>
+                    <i className='fas fa-trash-alt'></i>
                     <span className='pl-2'>Delete</span>
                 </a>
             </div>

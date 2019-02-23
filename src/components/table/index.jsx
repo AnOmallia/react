@@ -4,7 +4,6 @@ import Cell from './cell';
 import Row from './row';
 import Header from './header';
 import HeaderCell from './header-cell';
-// import './index.css';
 
 class Table extends Component {
    static propTypes = {
@@ -16,35 +15,19 @@ class Table extends Component {
    };
 
    static defaultProps = {
-    //   theme: 'blue',
-    //   className: '',
+    // 
    };
 
    constructor(props) {
       super(props);
       this.state = {
-        //  activeIndex: 0,
+        //  
       };
    }
 
    render() {
       const {children} = this.props;
-    //   const { activeIndex } = this.state;
       const childrenArray = React.Children.map(children, (child) => {
-        //  if (child.type.displayName === Header.displayName) {
-            // return React.cloneElement(child, {
-            //    activeIndex,
-            //    theme,
-            // });
-        //  } else if (child.type.displayName === Row.displayName) {
-        //     return React.cloneElement(child, {
-        //        activeIndex,
-        //        fullWidth,
-        //        small,
-        //        theme,
-        //        onActivate: (changedActiveIndex) => this.setState({ activeIndex: changedActiveIndex }),
-        //     });
-        //  }
          return child;
       });
       return (
