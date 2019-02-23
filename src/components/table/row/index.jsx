@@ -1,11 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Row = ({children})=>{
+const Row = ({ children })=>{
     return (
         <div className='row border-bottom py-2'>
-            {children}
+            { children }
         </div>
     )
 }
+
+Row.propTypes = {
+    children: PropTypes.array,
+};
 
 export default Row

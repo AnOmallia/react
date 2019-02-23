@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import IpAddressesTable from './views'
+import IpAddressesTable from './views/ip-addresses-table'
 import './App.css';
 
 class App extends Component {

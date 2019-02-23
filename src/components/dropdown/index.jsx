@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Dropdown extends Component{
     constructor(props) {
@@ -14,7 +15,7 @@ class Dropdown extends Component{
         });
     }
 
-    componentDidMount(prevState, prevProps) {
+    componentDidMount() {
         document.body.addEventListener('click', this.handleClose);
         document.addEventListener('close-dropdown', this.closeDropDown, false);
     }
@@ -48,8 +49,8 @@ class Dropdown extends Component{
     };
 
     render(){
-        const {isOpen} =this.state
-        const {id, onSelectAction, className} =this.props
+        const { isOpen } =this.state
+        const { id, onSelectAction, className } = this.props
         return (
             <div
                 className={`dropdown d-inline-block ${className}`}
@@ -57,7 +58,7 @@ class Dropdown extends Component{
                 <a className="btn btn-primary dropdown-toggle" href="#" role="button" id='toogle-dropdown'>
                     Actions
                 </a>
-          {isOpen &&(
+          { isOpen &&(
             <div className="dropdown-menu show pin-right">
                 <a
                     className="dropdown-item" href="#"
@@ -72,5 +73,15 @@ class Dropdown extends Component{
         )
     }
 }
+
+Dropdown.defaultProps = {
+    className: '',
+}
+
+Dropdown.propTypes = {
+    className: PropTypes.string,
+    id: PropTypes.number,
+    onSelectAction: PropTypes.func,
+};
 
 export default Dropdown;

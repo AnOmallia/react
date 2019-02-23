@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import axios from 'axios';
-import Dropdown from '../components/dropdown'
-import Dialog from '../components/dialog'
-import Table, { Row, Cell, Header, HeaderCell } from '../components/table';
+import Dropdown from '../../components/dropdown'
+import Dialog from '../../components/dialog'
+import Table, { Row, Cell, Header, HeaderCell } from '../../components/table';
 
 
 class IpAddressesTable extends Component {
@@ -10,10 +10,12 @@ class IpAddressesTable extends Component {
         super(props)
         this.state = {
             data: [],
+            initialData: '',
             sort: {
                 field: 'name',
                 order: 'asc'
             },
+            filter: {},
             openDialog: false,
             activeFilter: false,
         }
@@ -21,10 +23,11 @@ class IpAddressesTable extends Component {
     }
     componentDidMount(){
         axios.get('./data.json').then((response)=>{
-            const {status, data} = response
+            const { status, data } = response
             if(status===200){
                 this.setState(()=>({
                     data: data.data,
+                    initialData: JSON.stringify(data.data)
                 }))
             }
         }).catch((error)=>{
@@ -33,7 +36,7 @@ class IpAddressesTable extends Component {
     }
 
     handleSort = (field) => {
-        const {sort} = this.state
+        const { sort } = this.state
         const data = JSON.parse(JSON.stringify(this.state.data))
         const newSort = {
             field: field,
@@ -87,7 +90,7 @@ class IpAddressesTable extends Component {
                 onClose: this.handleCloseDialog,
             }
         }
-        this.setState(()=>({ openDialog: true}))
+        this.setState(()=>({ openDialog: true }))
     }
 
     handleDeleteClick = (id)=>{
@@ -99,16 +102,44 @@ class IpAddressesTable extends Component {
         // Here should be call to delete item from database
     }
 
-    handleCloseDialog = ()=>{
-        this.setState(()=>({ openDialog: false}))
+    handleCloseDialog = () => {
+        this.setState(()=>({ openDialog: false }))
     }
 
-    handleFilterClick = ()=>{
-        this.setState(()=>({ activeFilter: true}))
+    handleFilterClick = () => {
+        this.setState((oldState) => ({ activeFilter: !oldState.activeFilter }))
+    }
+
+    handleFilterChange = (key, value)=>{
+        const data = JSON.parse(this.state.initialData)
+        this.setState((oldState)=>({
+            filter: { ...oldState.filter, [key]: value }
+        }), ()=>{
+            const {filter} = this.state;
+            const newData = data.filter((item) => {
+                return Object.keys(filter).every((key) => {
+                    if(typeof item[key] === 'string'){
+                        return item[key].toLowerCase().indexOf(filter[key].toLowerCase()) !== -1;
+                    } else {
+                        return item[key].some(element => {
+                            return element.port_name.toLowerCase().indexOf(filter[key].toLowerCase()) !== -1
+                        });
+                    }
+                })
+            })
+            this.setState(() => ({ data: newData}))
+        })
+    }
+
+    handleClearFilteringClick = () => {
+        this.setState((oldState)=>({
+            filter: {},
+            data: JSON.parse(oldState.initialData)
+        }))
     }
 
     render(){
-        const {sort, data, openDialog, activeFilter} = this.state
+        const {sort, data, openDialog, activeFilter, filter} = this.state
         return(
             <Fragment>
                 {openDialog && (
@@ -125,10 +156,10 @@ class IpAddressesTable extends Component {
                     <i className="fa fa-ellipsis-v float-left" aria-hidden="true"></i>
                     <button
                         type="button"
-                        class="btn btn-light float-right"
+                        className="btn btn-light float-right"
                         onClick={this.handleFilterClick}
                     >
-                        <i class='fas fa-filter'></i>
+                        <i className='fas fa-filter'></i>
                         Filter
                     </button>
                 </div>
@@ -137,6 +168,8 @@ class IpAddressesTable extends Component {
                         sort={sort}
                         onClickSort={this.handleSort}
                         activeFilter={activeFilter}
+                        onFilterChange={this.handleFilterChange}
+                        filter={filter}
                     >
                         <HeaderCell
                             fieldName='name'
@@ -159,7 +192,9 @@ class IpAddressesTable extends Component {
                         >
                             Ports
                         </HeaderCell>
-                        <HeaderCell>
+                        <HeaderCell
+                            onClearFilteringClick={this.handleClearFilteringClick}
+                        >
                             Action
                         </HeaderCell>
                     </Header>
@@ -171,8 +206,10 @@ class IpAddressesTable extends Component {
                         <Cell>{row.name}</Cell>
                         <Cell><span className={ `${row.anycast.length ? 'font-weight-bold' : 'font-weight-normal'}`}>{row.ip_address}</span>{` ${row.anycast.length ? '[ANYCAST]': ''}`}</Cell>
                         <Cell>
-                            {row.ports.map((port)=>(
-                                <div className='d-flex flex-column border rounded bg-white p-2'>
+                            {row.ports.map((port, index)=>(
+                                <div
+                                    key={index}
+                                    className='d-flex flex-column border rounded bg-white p-2'>
                                     <div>
                                         <i className='fas fa-ethernet text-success'></i>
                                         <span className='pl-2'>{`${port.port_description ? port.port_description : ''} (${port.port_name})@${port.switch}`}</span>
@@ -182,11 +219,11 @@ class IpAddressesTable extends Component {
                                     </div>
                                 </div>
                             ))}
-                        {row.port}
+                        { row.port }
                         </Cell>
                         <Cell>
                             <Dropdown
-                                id={row.id}
+                                id={ row.id }
                                 onSelectAction={this.handleSelectAction}
                                 className='float-right'
                             />
