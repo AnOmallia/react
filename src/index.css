@@ -12,3 +12,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.border-3 {
+  border-width:3px !important;
+}
+.pin-right {
+  right: 0 !important;
+  left: auto !important;
+}
+
+.z-10{
+  z-index: 10 !important;
+}
+
+.opacity-50{
+  opacity: 0.5 !important;
+}
